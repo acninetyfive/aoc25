@@ -34,9 +34,10 @@ def part_one(end_state_array, transition_arrays):
                 break
     return num_transitions
 
-f = open("test.txt", "r")
+f = open("in.txt", "r")
 pattern = re.compile(r"(\[.*\]) (\(.*\)) (\{.*\})")
 fewest_transitions_one = []
+fewest_transitions_two = []
 for line in f:
     print(line.strip())
     match = pattern.match(line.strip())
@@ -50,32 +51,10 @@ for line in f:
     for t in transitions:
         transition_arrays.append(bool_array_from_transition(t, len(end_state)))
     
-    # fewest_transitions_one.append(part_one(end_state_array, transition_arrays))
+    fewest_transitions_one.append(part_one(end_state_array, transition_arrays))
     # End part one
-
-    # Part Two
-    joltage_transition_arrays = [bool_array_to_int_array(ta) for ta in transition_arrays]
-    # Find all combinations of transitions that reach the end state
-
-    found = False
-    num_transitions = 0
-    fewest_transitions_two = []
-    while not found:
-        num_transitions += 1
-        from itertools import product
-        for transition_sequence in product(joltage_transition_arrays, repeat=num_transitions):
-            # Apply this sequence of transitions
-            print("Trying", num_transitions, "transitions:", transition_sequence)
-            current_state = np.zeros_like(end_state_array, dtype=int)
-            for ta in transition_sequence:
-                next_state = (current_state + ta)
-                current_state = next_state
-            if np.all(current_state == joltage_end_state):
-                fewest_transitions_two.append(num_transitions)
-                found = True
-                break
+    
 
 f.close()
 
-#print("Part one result: " + str(sum(fewest_transitions_one)))
-print("Part two result: " + str(sum(fewest_transitions_two)))
+print("Part one result: " + str(sum(fewest_transitions_one)))
